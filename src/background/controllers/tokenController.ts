@@ -1,9 +1,9 @@
 import { each, findIndex, isEmpty } from 'lodash';
 import BigNumber from 'bignumber.js';
-import { Insight } from 'qtumjs-wallet';
-const { Qweb3 } = require('qweb3');
+import { Insight } from 'bcsjs-wallet';
+const { BCSweb3 } = require('bcsweb3');
 
-import QryptoController from '.';
+import BCSChromeController from '.';
 import IController from './iController';
 import { MESSAGE_TYPE, STORAGE, NETWORK_NAMES } from '../../constants';
 import QRCToken from '../../models/QRCToken';
@@ -18,7 +18,7 @@ const INIT_VALUES = {
   tokens: undefined,
   getBalancesInterval: undefined,
 };
-const qweb3 = new Qweb3('null');
+const bcsweb3 = new BCSweb3('null');
 
 export default class TokenController extends IController {
   private static GET_BALANCES_INTERVAL_MS: number = 60000;
@@ -27,7 +27,7 @@ export default class TokenController extends IController {
 
   private getBalancesInterval?: number = INIT_VALUES.getBalancesInterval;
 
-  constructor(main: QryptoController) {
+  constructor(main: BCSChromeController) {
     super('token', main);
 
     chrome.runtime.onMessage.addListener(this.handleMessage);
@@ -104,7 +104,7 @@ export default class TokenController extends IController {
     }
 
     const methodName = 'balanceOf';
-    const data = qweb3.encoder.constructData(
+    const data = bcsweb3.encoder.constructData(
       qrc20TokenABI,
       methodName,
       [this.main.account.loggedInAccount.wallet.qjsWallet.address],
@@ -118,7 +118,7 @@ export default class TokenController extends IController {
     }
 
     // Decode result
-    const decodedRes = qweb3.decoder.decodeCall(result, qrc20TokenABI, methodName);
+    const decodedRes = bcsweb3.decoder.decodeCall(result, qrc20TokenABI, methodName);
     const bnBal = decodedRes!.executionResult.formattedOutput[0]; // Returns as a BN instance
     const bigNumberBal = new BigNumber(bnBal.toString(10)); // Convert to BigNumber instance
     const balance = bigNumberBal.dividedBy(new BigNumber(10 ** token.decimals)).toNumber(); // Convert to regular denomination
@@ -147,33 +147,33 @@ export default class TokenController extends IController {
     try {
       // Get name
       let methodName = 'name';
-      let data = qweb3.encoder.constructData(qrc20TokenABI, methodName, []);
+      let data = bcsweb3.encoder.constructData(qrc20TokenABI, methodName, []);
       let { result, error }: IRPCCallResponse =
         await this.main.rpc.callContract(generateRequestId(), [contractAddress, data]);
       if (error) {
         throw Error(error);
       }
-      result = qweb3.decoder.decodeCall(result, qrc20TokenABI, methodName) as Insight.IContractCall;
+      result = bcsweb3.decoder.decodeCall(result, qrc20TokenABI, methodName) as Insight.IContractCall;
       const name = result.executionResult.formattedOutput[0];
 
       // Get symbol
       methodName = 'symbol';
-      data = qweb3.encoder.constructData(qrc20TokenABI, methodName, []);
+      data = bcsweb3.encoder.constructData(qrc20TokenABI, methodName, []);
       ({ result, error } = await this.main.rpc.callContract(generateRequestId(), [contractAddress, data]));
       if (error) {
         throw Error(error);
       }
-      result = qweb3.decoder.decodeCall(result, qrc20TokenABI, methodName) as Insight.IContractCall;
+      result = bcsweb3.decoder.decodeCall(result, qrc20TokenABI, methodName) as Insight.IContractCall;
       const symbol = result.executionResult.formattedOutput[0];
 
       // Get decimals
       methodName = 'decimals';
-      data = qweb3.encoder.constructData(qrc20TokenABI, methodName, []);
+      data = bcsweb3.encoder.constructData(qrc20TokenABI, methodName, []);
       ({ result, error } = await this.main.rpc.callContract(generateRequestId(), [contractAddress, data]));
       if (error) {
         throw Error(error);
       }
-      result = qweb3.decoder.decodeCall(result, qrc20TokenABI, methodName) as Insight.IContractCall;
+      result = bcsweb3.decoder.decodeCall(result, qrc20TokenABI, methodName) as Insight.IContractCall;
       const decimals = result.executionResult.formattedOutput[0];
 
       if (name && symbol && decimals) {
@@ -212,7 +212,7 @@ export default class TokenController extends IController {
                                 gasLimit: number, gasPrice: number ) => {
     // bn.js does not handle decimals well (Ex: BN(1.2) => 1 not 1.2) so we use BigNumber
     const bnAmount = new BigNumber(amount).times(new BigNumber(10 ** token.decimals));
-    const data = qweb3.encoder.constructData(qrc20TokenABI, 'transfer', [receiverAddress, bnAmount]);
+    const data = bcsweb3.encoder.constructData(qrc20TokenABI, 'transfer', [receiverAddress, bnAmount]);
     const args = [token.address, data, null, gasLimit, gasPrice];
     const { error } = await this.main.rpc.sendToContract(generateRequestId(), args);
 

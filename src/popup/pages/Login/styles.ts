@@ -5,7 +5,8 @@ const styles: StyleRulesCallback = (theme: Theme) => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    margin: theme.padding.md,
+    padding: theme.padding.md,
+    background: '#faede3',
   },
   fieldContainer: {
     display: 'flex',

@@ -6,6 +6,7 @@ const styles: StyleRulesCallback = (theme: Theme) => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    background: '#faede3',
   },
   contentContainer: {
     flex: 1,
@@ -47,8 +48,15 @@ const styles: StyleRulesCallback = (theme: Theme) => ({
     marginBottom: 32,
   },
   qrCodeContainer: {
-    display: 'flex',
+    display: 'block',
     justifyContent: 'center',
+    color: '#faede3',
+    margin: '80px 0 0 0',
+    background: '#ffffff',
+    transform: 'scale(2)',
+    textAlign: 'center',
+    padding: '10px',
+    
   },
 });
 

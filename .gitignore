@@ -429,5 +429,11 @@ __pycache__/
 # should be stored in the .pubxml.user file.
 
 
+
+*.zip
+*.crx
+*.pem
+
+.vscode
 # End of https://www.gitignore.io/api/node,linux,macos,windows,visualstudio,visualstudiocode
 

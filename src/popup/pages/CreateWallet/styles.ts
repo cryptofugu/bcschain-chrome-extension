@@ -5,6 +5,7 @@ const styles: StyleRulesCallback = (theme: Theme) => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    background: '#faede3',
   },
   contentContainer: {
     height: '100%',

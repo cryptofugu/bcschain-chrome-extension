@@ -22,13 +22,14 @@ class AccountInfo extends Component<WithStyles & IProps, {}> {
       mainCard: '/account-detail',
       sendButton: '/send',
       receiveButton: '/receive',
+      createButton: '/create-contract'
     }[id];
     this.props.store!.routerStore.push(location);
   }
 
   public render() {
     const { classes, hasRightArrow } = this.props;
-    const { loggedInAccountName, info, qtumBalanceUSD, networkBalAnnotation } = this.props.store!.sessionStore;
+    const { loggedInAccountName, info/*, bcsBalanceUSD, networkBalAnnotation*/ } = this.props.store!.sessionStore;
 
     if (!loggedInAccountName || !info) {
       return null;
@@ -40,10 +41,10 @@ class AccountInfo extends Component<WithStyles & IProps, {}> {
         <Typography className={classes.address}>{info.addrStr}</Typography>
         <div className={classes.amountContainer}>
           <Typography className={classes.tokenAmount}>{info.balance}</Typography>
-          <Typography className={classes.token}>QTUM</Typography>
+          <Typography className={classes.token}>BCS</Typography>
           {hasRightArrow && <KeyboardArrowRight className={classes.rightArrow} />}
         </div>
-        <Typography className={classes.balanceUSD}>{`${qtumBalanceUSD} ${networkBalAnnotation}`}</Typography>
+        { /*<Typography className={classes.balanceUSD}>{`${bcsBalanceUSD} ${networkBalAnnotation}`}</Typography>*/ }
         <div className={classes.actionButtonsContainer}>
           <Button
             id="sendButton"
@@ -65,6 +66,18 @@ class AccountInfo extends Component<WithStyles & IProps, {}> {
             >
               Receive
             </Button>
+          {/*
+          <Button
+            id="createButton"
+            color="secondary"
+            variant="contained"
+            size="small"
+            className={classes.actionButton}
+            onClick={(e) => this.handleClick('createButton', e)}
+            >
+              Create Contract
+            </Button>
+          */}
         </div>
       </div>
     );

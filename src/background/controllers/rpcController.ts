@@ -1,13 +1,13 @@
-import { WalletRPCProvider, Insight } from 'qtumjs-wallet';
+import { WalletRPCProvider, Insight } from 'bcsjs-wallet';
 
-import QryptoController from '.';
+import BCSChromeController from '.';
 import IController from './iController';
 import { MESSAGE_TYPE, RPC_METHOD } from '../../constants';
 import { IRPCCallResponse } from '../../types';
 import Config from '../../config';
 
 export default class RPCController extends IController {
-  constructor(main: QryptoController) {
+  constructor(main: BCSChromeController) {
     super('rpc', main);
 
     chrome.runtime.onMessage.addListener(this.handleMessage);

@@ -1,14 +1,14 @@
 import { IExtensionAPIMessage, IRPCCallRequest } from '../types';
 import { TARGET_NAME, API_TYPE } from '../constants';
-import { QryptoRPCProvider } from './QryptoRPCProvider';
+import { BCSChromeRPCProvider } from './BCSChromeRPCProvider';
 import { showSignTxWindow } from './window';
 import { isMessageNotValid } from '../utils';
 import { IInpageAccountWrapper } from '../types';
 
-const qryptoProvider: QryptoRPCProvider = new QryptoRPCProvider();
+const bcschromeProvider: BCSChromeRPCProvider = new BCSChromeRPCProvider();
 
-let qrypto: any = {
-  rpcProvider: qryptoProvider,
+let bcschrome: any = {
+  rpcProvider: bcschromeProvider,
   account: null,
 };
 let signTxUrl: string;
@@ -18,17 +18,17 @@ window.addEventListener('message', handleInpageMessage, false);
 
 // expose apis
 Object.assign(window, {
-  qrypto,
+  bcschrome,
 });
 
 function handlePortDisconnected() {
-  qrypto = undefined;
-  Object.assign(window, { qrypto });
+  bcschrome = undefined;
+  Object.assign(window, { bcschrome });
   window.removeEventListener('message', handleInpageMessage, false);
 }
 
 /**
- * Handles the sendToContract request originating from the QryptoRPCProvider and opens the sign tx window.
+ * Handles the sendToContract request originating from the BCSChromeRPCProvider and opens the sign tx window.
  * @param request SendToContract request.
  */
 const handleSendToContractRequest = (request: IRPCCallRequest) => {
@@ -49,14 +49,14 @@ function handleInpageMessage(event: MessageEvent) {
       handleSendToContractRequest(message.payload);
       break;
     case API_TYPE.RPC_RESPONSE:
-      return qryptoProvider.handleRpcCallResponse(message.payload);
-    case API_TYPE.SEND_INPAGE_QRYPTO_ACCOUNT_VALUES:
+      return bcschromeProvider.handleRpcCallResponse(message.payload);
+    case API_TYPE.SEND_INPAGE_BCSCHROME_ACCOUNT_VALUES:
       const accountWrapper: IInpageAccountWrapper = message.payload;
-      qrypto.account = accountWrapper.account;
+      bcschrome.account = accountWrapper.account;
       if (accountWrapper.error) {
         throw accountWrapper.error;
       } else {
-        console.log('window.qrypto.account has been updated,\n Reason:',  accountWrapper.statusChangeReason);
+        console.log('window.bcschrome.account has been updated,\n Reason:',  accountWrapper.statusChangeReason);
       }
       break;
     case API_TYPE.PORT_DISCONNECTED:

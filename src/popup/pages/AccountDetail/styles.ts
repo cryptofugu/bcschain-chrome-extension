@@ -20,6 +20,7 @@ const styles: StyleRulesCallback = (theme: Theme) => ({
   },
   tab: {
     flex: 1,
+    background: '#faede3',
   },
   list: {
     flex: 1,

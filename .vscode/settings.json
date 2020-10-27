@@ -1,3 +1,21 @@
 {
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "files.watcherExclude": {
+        "**/node_modules/**": false
+    },
+    "java.project.resourceFilters": [
+
+
+        ".git"
+    ],
+    "search.exclude": {
+        "**/node_modules": false
+    },
+    "maven.excludedFolders": [
+
+        "**/.*",
+        "**/node_modules",
+        "**/target",
+        "**/bin"
+    ]
 }

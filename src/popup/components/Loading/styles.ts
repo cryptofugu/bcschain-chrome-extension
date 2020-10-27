@@ -10,7 +10,7 @@ const styles: StyleRulesCallback = (theme: Theme) => ({
     bottom: 0,
     left: 0,
     zIndex: 999999,
-    background: 'white',
+    background: '#faede3',
     transition: 'opacity 1s;',
     '&.loading': {
       opacity: 1,
@@ -38,7 +38,7 @@ const styles: StyleRulesCallback = (theme: Theme) => ({
   anim9: {
     width: '160px',
     height: '6px',
-    background: 'linear-gradient(to right, #5539DF, #5539DF 30%, #999 10%)',
+    background: 'linear-gradient(to right, #BB9F89, #BB9F89 30%, #27262E 10%)',
     animation: 'anim9 1s linear infinite',
   },
   '@keyframes anim9': {

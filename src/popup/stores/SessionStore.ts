@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { Insight } from 'qtumjs-wallet';
+import { Insight } from 'bcsjs-wallet';
 import { isUndefined } from 'lodash';
 
 import { MESSAGE_TYPE, NETWORK_NAMES } from '../../constants';
@@ -9,7 +9,7 @@ const INIT_VALUES = {
   networkIndex: 0,
   loggedInAccountName: undefined,
   info: undefined,
-  qtumUSD: undefined,
+  bcsUSD: undefined,
 };
 
 export default class SessionStore {
@@ -17,8 +17,8 @@ export default class SessionStore {
   @observable public networks: QryNetwork[] = [];
   @observable public loggedInAccountName?: string = INIT_VALUES.loggedInAccountName;
   @observable public info?: Insight.IGetInfo = INIT_VALUES.info;
-  @computed public get qtumBalanceUSD() {
-    return isUndefined(this.qtumUSD) ? 'Loading...' : `$${this.qtumUSD} USD`;
+  @computed public get bcsBalanceUSD() {
+    return isUndefined(this.bcsUSD) ? 'Loading...' : `$${this.bcsUSD} USD`;
   }
   @computed public get networkName() {
     return this.networks[this.networkIndex].name;
@@ -30,7 +30,7 @@ export default class SessionStore {
     return  this.isMainNet ? '' : `(${this.networkName}, no value)`;
   }
 
-  private qtumUSD?: number = INIT_VALUES.qtumUSD;
+  private bcsUSD?: number = INIT_VALUES.bcsUSD;
 
   constructor() {
     chrome.runtime.onMessage.addListener(this.handleMessage);
@@ -48,7 +48,7 @@ export default class SessionStore {
       this.loggedInAccountName = response;
     });
     chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_WALLET_INFO }, (response: any) => this.info = response);
-    chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_QTUM_USD }, (response: any) => this.qtumUSD = response);
+    chrome.runtime.sendMessage({ type: MESSAGE_TYPE.GET_BCS_USD }, (response: any) => this.bcsUSD = response);
   }
 
   @action
@@ -63,8 +63,8 @@ export default class SessionStore {
       case MESSAGE_TYPE.GET_WALLET_INFO_RETURN:
         this.info = request.info;
         break;
-      case MESSAGE_TYPE.GET_QTUM_USD_RETURN:
-        this.qtumUSD = request.qtumUSD;
+      case MESSAGE_TYPE.GET_BCS_USD_RETURN:
+        this.bcsUSD = request.bcsUSD;
         break;
       default:
         break;

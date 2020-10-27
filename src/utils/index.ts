@@ -1,5 +1,5 @@
 import { isFinite } from 'lodash';
-import { validatePrivateKey } from 'qtumjs-wallet';
+import { validatePrivateKey } from 'bcsjs-wallet';
 
 import { TARGET_NAME } from '../constants';
 import { IExtensionMessageData } from '../types';
@@ -27,10 +27,10 @@ export const generateRandomId = (): string => {
 };
 
 /*
-* Validates the Qtum address based on length and starting character.
+* Validates the BCS address based on length and starting character.
 * @param isMainNet {boolean} Flag if is a mainnet address (or else testnet address).
-* @param address {string} The Qtum address to validate.
-* @return {boolean} Returns if it is a valid Qtum address.
+* @param address {string} The BCS address to validate.
+* @return {boolean} Returns if it is a valid BCS address.
 */
 export const isValidAddress = (isMainNet: boolean, address?: string) => {
   if (!address) {
@@ -40,9 +40,9 @@ export const isValidAddress = (isMainNet: boolean, address?: string) => {
     return false;
   }
   if (isMainNet) {
-    return address.startsWith('Q');
+    return address.startsWith('B');
   }
-  return address.startsWith('q');
+  return address.startsWith('b');
 };
 
 export const isValidPrivateKey = (address?: string) => {

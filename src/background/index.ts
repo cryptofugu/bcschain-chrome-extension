@@ -1,5 +1,5 @@
-import QryptoController from './controllers';
+import BCSChromeController from './controllers';
 
 // Add instance to window for debugging
-const controller = new QryptoController();
+const controller = new BCSChromeController();
 Object.assign(window, { controller });

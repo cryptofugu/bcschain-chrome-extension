@@ -23,9 +23,9 @@ const colorGray: ColorProperty = '#747474';
 const colorOrange: ColorProperty = '#F5A623';
 const colorRed: ColorProperty = '#D0021B';
 
-const primaryColor: ColorProperty = '#5539DF';
-const primaryColorDark: ColorProperty = '#5539DF';
-const primaryColorLight: ColorProperty = '#8E6BF1';
+const primaryColor: ColorProperty = '#BB9F89';
+const primaryColorDark: ColorProperty = '#27262E';
+const primaryColorLight: ColorProperty = '#faede3';
 
 const secondaryColor: ColorProperty = colorWhite;
 const secondaryColorLight: ColorProperty = colorWhite;
@@ -34,7 +34,7 @@ const secondaryColorDark: ColorProperty = colorWhite;
 const textColorPrimary: ColorProperty = 'rgba(0, 0, 0, 0.8)';
 const textColorSecondary: ColorProperty = 'rgba(0, 0, 0, 0.5)';
 
-const gradientPurple: ColorProperty = `linear-gradient(300.29deg, ${primaryColorLight} -9.7%, ${primaryColor} 85.28%)`;
+const gradientPurple: ColorProperty = `linear-gradient(300.29deg, ${primaryColor} -9.7%, ${primaryColor} 85.28%)`;
 
 /* Padding */
 const spacingMultiplier = 4;

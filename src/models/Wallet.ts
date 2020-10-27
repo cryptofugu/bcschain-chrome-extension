@@ -1,19 +1,19 @@
 import { action } from 'mobx';
-import { Wallet as QtumWallet, Insight, WalletRPCProvider } from 'qtumjs-wallet';
+import { Wallet as BCSWallet, Insight, WalletRPCProvider } from 'bcsjs-wallet';
 import deepEqual from 'deep-equal';
 
 import { ISigner } from '../types';
-import { ISendTxOptions } from 'qtumjs-wallet/lib/tx';
+import { ISendTxOptions } from 'bcsjs-wallet/lib/tx';
 import { RPC_METHOD, NETWORK_NAMES } from '../constants';
 
 export default class Wallet implements ISigner {
-  public qjsWallet?: QtumWallet;
+  public qjsWallet?: BCSWallet;
   public rpcProvider?: WalletRPCProvider;
   public info?: Insight.IGetInfo;
-  public qtumUSD?: number;
-  public maxQtumSend?: number;
+  public bcsUSD?: number;
+  public maxBCSSend?: number;
 
-  constructor(qjsWallet: QtumWallet) {
+  constructor(qjsWallet: BCSWallet) {
     this.qjsWallet = qjsWallet;
     this.rpcProvider = new WalletRPCProvider(this.qjsWallet);
   }
@@ -55,13 +55,13 @@ export default class Wallet implements ISigner {
     return false;
   }
 
-  // @param amount: (unit - whole QTUM)
+  // @param amount: (unit - whole BCS)
   public send = async (to: string, amount: number, options: ISendTxOptions): Promise<Insight.ISendRawTxResult> => {
     if (!this.qjsWallet) {
       throw Error('Cannot send without wallet.');
     }
 
-    // convert amount units from whole QTUM => SATOSHI QTUM
+    // convert amount units from whole BCS => SATOSHI BCS
     return await this.qjsWallet!.send(to, amount * 1e8, { feeRate: options.feeRate });
   }
 
@@ -80,22 +80,22 @@ export default class Wallet implements ISigner {
     }
   }
 
-  public calcMaxQtumSend = async (networkName: string) => {
+  public calcMaxBCSSend = async (networkName: string) => {
     if (!this.qjsWallet || !this.info) {
       throw Error('Cannot calculate max send amount without wallet or this.info.');
     }
-    this.maxQtumSend = await this.qjsWallet.sendEstimateMaxValue(this.maxQtumSendToAddress(networkName));
-    return this.maxQtumSend;
+    this.maxBCSSend = await this.qjsWallet.sendEstimateMaxValue(this.maxBCSSendToAddress(networkName));
+    return this.maxBCSSend;
   }
 
   /**
    * We just need to pass a valid sendTo address belonging to that network for the
-   * qtumjs-wallet library to calculate the maxQtumSend amount.  It does not matter what
+   * bcsjs-wallet library to calculate the maxBCSSend amount.  It does not matter what
    * the specific address is, as that does not affect the value of the
-   * maxQtumSend amount
+   * maxBCSSend amount
    */
-  private maxQtumSendToAddress = (networkName: string) => {
+  private maxBCSSendToAddress = (networkName: string) => {
     return networkName === NETWORK_NAMES.MAINNET ?
-      'QN8HYBmMxVyf7MQaDvBNtneBN8np5dZwoW' : 'qLJsx41F8Uv1KFF3RbrZfdLnyWQzvPdeF9';
+      'BSnro5jCwcjQq8Qfh1LYmGwy8vjrnugR69' : 'qLJsx41F8Uv1KFF3RbrZfdLnyWQzvPdeF9';
   }
 }
