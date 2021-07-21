@@ -1,5 +1,5 @@
 import { Insight } from 'bcsjs-wallet';
-import { map, find, partition, sumBy, includes, round } from 'lodash';
+import { map, /*find, partition, sumBy, includes,*/ round } from 'lodash';
 import moment from 'moment';
 
 import BCSChromeController from '.';
@@ -94,28 +94,27 @@ export default class TransactionController extends IController {
     }
 
     const wallet = this.main.account.loggedInAccount.wallet.qjsWallet;
-    const { pagesTotal, txs } =  await wallet.getTransactions(pageNum);
-    this.pagesTotal = pagesTotal;
+    const { totalCount, transactions } =  await wallet.getTransactions(pageNum);
+    this.pagesTotal = totalCount;
 
-    return map(txs, (tx: Insight.IRawTransactionInfo) => {
+    return map(transactions, (tx: Insight.IRawTransactionBasicInfo) => {
       const {
-        txid,
+        id,
         confirmations,
-        time,
-        vin,
-        vout,
+        timestamp,
+        amount,
       } = tx;
 
-      const sender = find(vin, {addr: wallet.address});
-      const outs = map(vout, ({ value, scriptPubKey: { addresses } }) => {
-        return { value, addresses };
-      });
-      const [mine, other] = partition(outs, ({ addresses }) => includes(addresses, wallet.address));
-      const amount = sumBy(sender ? other : mine, ({ value }) => parseFloat(value));
+      // const sender = find(vin, {addr: wallet.address});
+      // const outs = map(vout, ({ value, scriptPubKey: { addresses } }) => {
+      //   return { value, addresses };
+      // });
+      // const [mine, other] = partition(outs, ({ addresses }) => includes(addresses, wallet.address));
+      // const amount = sumBy(sender ? other : mine, ({ value }) => parseFloat(value));
 
       return new Transaction({
-        id: txid,
-        timestamp: moment(new Date(time * 1000)).format('MM-DD-YYYY, HH:mm'),
+        id,
+        timestamp: moment(new Date(timestamp * 1000)).format('MM-DD-YYYY, HH:mm'),
         confirmations,
         amount: round(amount, 8),
       });
